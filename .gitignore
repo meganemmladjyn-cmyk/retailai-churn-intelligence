@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment
+.env
+*.env.local
+
+# ML artifacts
+ml/artifacts/*.joblib
+ml/artifacts/*.pkl
+ml/artifacts/*.json
+ml/artifacts/*.bin
+
+# Data
+data/*.csv
+data/*.parquet
+data/*.feather
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.docker/

@@ -1,0 +1,33 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://retailai:password@db:5432/retailai_churn
+      DEBUG: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./ml/artifacts:/app/ml/artifacts
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: retailai
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: retailai_churn
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U retailai -d retailai_churn"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

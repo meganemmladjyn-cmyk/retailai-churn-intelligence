@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: retailai-churn-intelligence
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: retailai-churn-db
+          property: connectionString
+      - key: DEBUG
+        value: false
+      - key: MODEL_PATH
+        value: ml/artifacts/xgboost_churn.joblib
+      - key: SHAP_EXPLAINER_PATH
+        value: ml/artifacts/shap_explainer.joblib
+
+databases:
+  - name: retailai-churn-db
+    plan: free
+    databaseName: retailai_churn
+    user: retailai
