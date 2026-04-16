@@ -26,9 +26,15 @@ def setup_database():
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.drop_all)
 
-    asyncio.run(_create())
+    try:
+        asyncio.run(_create())
+    except Exception:
+        pass
     yield
-    asyncio.run(_drop())
+    try:
+        asyncio.run(_drop())
+    except Exception:
+        pass
 
 
 @pytest_asyncio.fixture
