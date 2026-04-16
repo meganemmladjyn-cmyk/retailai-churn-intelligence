@@ -45,3 +45,6 @@ Key paths:
 | Date | File | Error | Fix applied |
 |------|------|-------|-------------|
 | —    | —    | —     | —           |
+
+| J1 | Authentification | Conflit token claude.ai / API key à chaque session | 
+Réglé avec : setx ANTHROPIC_BASE_URL + claude /logout |
