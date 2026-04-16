@@ -61,3 +61,4 @@ Key paths:
 | J0 | git branch | Branch main vide après git init | Premier commit requis avant que la branch existe |
 | J1 | Auth Claude Code | Conflit token claude.ai / API key à chaque session | setx ANTHROPIC_BASE_URL permanent + claude /logout |
 | J1 | Claude Code mode | Auto mode proposé | Refusé — garder le contrôle manuel sur chaque action |
+| J1 | deploy.yml | secrets.XXX inaccessible dans condition if: de GitHub Actions | Utiliser une étape with continue-on-error ou vérifier dans le run: block |
