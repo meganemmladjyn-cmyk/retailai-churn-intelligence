@@ -112,6 +112,56 @@ def _build_customer(idx: int) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Public single-record generator (aligned with ml.features schema)
+# ---------------------------------------------------------------------------
+
+
+def generate_customer(idx: int) -> dict:
+    """Generate a single customer record aligned with FEATURE_COLUMNS and TARGET_COLUMN.
+
+    Args:
+        idx: 1-based integer used to build a unique customer_id (format RET-XXXXXX).
+
+    Returns:
+        Dictionary with customer_id, all FEATURE_COLUMNS, and is_churned target.
+    """
+    persona = _sample_persona()
+
+    signup_date: date = fake.date_between(start_date="-4y", end_date="-6m")
+
+    if persona == "active":
+        days_since = random.randint(1, 29)
+        total_orders = random.randint(10, 80)
+        total_spent = round(random.uniform(500.0, 8_000.0), 2)
+    elif persona == "at_risk":
+        days_since = random.randint(30, 89)
+        total_orders = random.randint(3, 20)
+        total_spent = round(random.uniform(100.0, 1_500.0), 2)
+    else:
+        days_since = random.randint(90, 730)
+        total_orders = random.randint(1, 8)
+        total_spent = round(random.uniform(20.0, 400.0), 2)
+
+    months_active = max(1, (TODAY - signup_date).days // 30)
+    avg_order_value: float = round(total_spent / total_orders, 2)
+    purchase_frequency: float = round(total_orders / months_active, 4)
+
+    return {
+        "customer_id": f"RET-{idx:06d}",
+        "age": random.randint(18, 75),
+        "total_orders": total_orders,
+        "total_spent": total_spent,
+        "avg_order_value": avg_order_value,
+        "days_since_last_purchase": days_since,
+        "purchase_frequency": purchase_frequency,
+        "return_rate": round(random.uniform(0.0, 1.0), 4),
+        "email_open_rate": round(random.uniform(0.0, 1.0), 4),
+        "support_tickets_count": random.randint(0, 10),
+        "is_churned": 1 if days_since >= 90 else 0,
+    }
+
+
+# ---------------------------------------------------------------------------
 # Dataset generation
 # ---------------------------------------------------------------------------
 
