@@ -1,5 +1,3 @@
-import pytest
-
 from ml.features import FEATURE_COLUMNS, TARGET_COLUMN
 
 
