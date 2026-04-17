@@ -91,6 +91,26 @@ retailai-churn-intelligence/
 
 ---
 
+## Exploratory Data Analysis
+
+**Dataset:** 49,920 customers × 12 features after cleaning (duplicates and missing values removed).
+
+**Class imbalance:** Churn rate of **15.3%** (85/15 split). XGBoost is trained with `scale_pos_weight` to compensate; primary evaluation metric is **AUC-ROC**.
+
+**Feature correlations with churn:**
+
+| Feature | Pearson r | Direction |
+|---|---|---|
+| `total_orders` | −0.46 | More orders → less churn |
+| `total_spent` | −0.44 | Higher spend → less churn |
+| `avg_order_value` | −0.16 | Weaker signal |
+
+**Distributions:** `total_spent` and `avg_order_value` are right-skewed — log-transform applied; **RobustScaler** recommended for monetary features to limit outlier influence.
+
+**Business insight:** Customers with **2+ support tickets AND ≤ 3 orders** represent the highest churn risk segment. Recommended action: deploy a targeted retention campaign within **30 days of last purchase** for this cohort.
+
+---
+
 ## Model performance (target)
 
 | Metric | Target |
