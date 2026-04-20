@@ -1,0 +1,7 @@
+{
+  "n_estimators": 257,
+  "max_depth": 3,
+  "learning_rate": 0.02650349310107115,
+  "num_leaves": 46,
+  "scale_pos_weight": 3.1388127302606703
+}
