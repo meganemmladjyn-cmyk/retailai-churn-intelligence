@@ -1,0 +1,39 @@
+{
+  "best_model": "LightGBM Tuned",
+  "best_params": {
+    "n_estimators": 257,
+    "max_depth": 3,
+    "learning_rate": 0.02650349310107115,
+    "num_leaves": 46,
+    "scale_pos_weight": 3.1388127302606703
+  },
+  "models": [
+    {
+      "model_name": "baseline",
+      "model_type": "LogisticRegression",
+      "cv_roc_auc": 0.9714,
+      "test_roc_auc": 0.9702,
+      "test_f1": 0.8227,
+      "test_recall": 0.7643,
+      "train_time_s": 0.09
+    },
+    {
+      "model_name": "xgboost",
+      "model_type": "XGBoost",
+      "cv_roc_auc": 0.9694,
+      "test_roc_auc": 0.9687,
+      "test_f1": 0.8127,
+      "test_recall": 0.8932,
+      "train_time_s": 0.74
+    },
+    {
+      "model_name": "tuned_best",
+      "model_type": "LightGBM Tuned",
+      "cv_roc_auc": 0.971,
+      "test_roc_auc": 0.97,
+      "test_f1": 0.814,
+      "test_recall": 0.911,
+      "train_time_s": 0.49
+    }
+  ]
+}
