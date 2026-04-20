@@ -34,6 +34,34 @@ TODAY = date.today()
 N_CUSTOMERS = 50_000
 OUTPUT_PATH = Path("data/raw/customers.csv")
 
+# Intercept calibrated so that the expected churn rate lands in [18%, 25%]:
+# active persona (~60%) contributes ~0.2%, at_risk (~25%) ~35%, churned (~15%) ~100%
+# → weighted average ≈ 24%
+CHURN_INTERCEPT: float = -2.5
+
+
+def _sigmoid(x: float) -> float:
+    """Numerically stable sigmoid."""
+    return 1.0 / (1.0 + np.exp(-np.clip(x, -500, 500)))
+
+
+def _churn_label(days_since: int, total_orders: int, total_spent: float, support_tickets: int) -> int:
+    """Probabilistic churn label via logistic function.
+
+    Combines recency, order volume, support pressure, and spend so that no
+    single feature deterministically encodes the label.
+    """
+    support_ratio = support_tickets / max(total_orders, 1)
+    logit = (
+        CHURN_INTERCEPT
+        + 0.04 * days_since
+        - 0.10 * total_orders
+        + 1.50 * support_ratio
+        - 0.02 * total_spent / 1000.0
+        + np.random.normal(0.0, 0.5)
+    )
+    return 1 if random.random() < _sigmoid(logit) else 0
+
 # Persona distribution
 PERSONA_WEIGHTS: dict[str, float] = {
     "active": 0.60,
@@ -93,6 +121,7 @@ def _build_customer(idx: int) -> dict:
 
     last_purchase_date: date = TODAY - timedelta(days=days_since)
     avg_order_value: float = round(total_spent / total_orders, 2)
+    support_tickets: int = random.randint(0, 10)
 
     return {
         "customer_id": f"CUST-{idx:06d}",
@@ -102,12 +131,11 @@ def _build_customer(idx: int) -> dict:
         "total_spent": total_spent,
         "avg_order_value": avg_order_value,
         "return_rate": round(random.uniform(0.0, 0.50), 4),
-        "support_tickets": random.randint(0, 10),
+        "support_tickets": support_tickets,
         "country": random.choice(COUNTRIES),
         "age": random.randint(18, 80),
         "gender": random.choice(GENDERS),
-        # Churn label: 1 if no purchase in the last 90 days
-        "churn": 1 if days_since >= 90 else 0,
+        "churn": _churn_label(days_since, total_orders, total_spent, support_tickets),
     }
 
 
@@ -145,6 +173,7 @@ def generate_customer(idx: int) -> dict:
     months_active = max(1, (TODAY - signup_date).days // 30)
     avg_order_value: float = round(total_spent / total_orders, 2)
     purchase_frequency: float = round(total_orders / months_active, 4)
+    support_tickets_count: int = random.randint(0, 10)
 
     return {
         "customer_id": f"RET-{idx:06d}",
@@ -156,8 +185,8 @@ def generate_customer(idx: int) -> dict:
         "purchase_frequency": purchase_frequency,
         "return_rate": round(random.uniform(0.0, 1.0), 4),
         "email_open_rate": round(random.uniform(0.0, 1.0), 4),
-        "support_tickets_count": random.randint(0, 10),
-        "is_churned": 1 if days_since >= 90 else 0,
+        "support_tickets_count": support_tickets_count,
+        "is_churned": _churn_label(days_since, total_orders, total_spent, support_tickets_count),
     }
 
 
