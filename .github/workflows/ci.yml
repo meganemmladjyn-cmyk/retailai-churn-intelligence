@@ -25,6 +25,8 @@ jobs:
         run: uv pip install --system -r requirements.txt faker pytest pytest-asyncio lightgbm
 
       - name: Generate test data
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: |
           uv pip install --system faker
           python data/generate.py
