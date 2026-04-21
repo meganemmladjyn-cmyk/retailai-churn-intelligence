@@ -27,7 +27,7 @@ jobs:
       - name: Generate test data
         run: |
           uv pip install --system faker
-          python src/data/generate.py
+          python data/generate.py
           python src/data/cleaner.py
           python src/features/run_features.py
           python src/models/train.py
