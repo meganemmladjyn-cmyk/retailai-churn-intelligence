@@ -175,7 +175,7 @@ def badge(text: str, accent: bool = False) -> str:
 # ── Page 1: Project Overview ──────────────────────────────────────────────────
 
 def page_overview() -> None:
-    st.markdown(f"""
+    st.markdown("""
     <div class="main-header">
         <h1>RetailAI Churn Intelligence System</h1>
         <p class="subtitle">Predicting which customers will leave, before they do.</p>
@@ -235,7 +235,7 @@ def page_overview() -> None:
 # ── Page 2: Explore the Data ──────────────────────────────────────────────────
 
 def page_data() -> None:
-    st.markdown(f'<h2 class="section-title">Explore the Data</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-title">Explore the Data</h2>', unsafe_allow_html=True)
     df = load_features()
 
     # ── Churn distribution
@@ -547,7 +547,7 @@ def page_build() -> None:
 
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown(f"#### Decisions")
+        st.markdown("#### Decisions")
         decisions = [
             ("Probabilistic churn label", "The original deterministic rule (`churn = days_since >= 90`) caused perfect ROC-AUC via data leakage. Replaced with a sigmoid combining 4 signals."),
             ("LightGBM over XGBoost", "Near-identical ROC-AUC but +2% recall and 2× faster training. For a CRM use case, recall is the decisive metric."),
@@ -559,7 +559,7 @@ def page_build() -> None:
             st.markdown("")
 
     with col2:
-        st.markdown(f"#### Lessons Learned")
+        st.markdown("#### Lessons Learned")
         lessons = [
             "Always audit feature-label correlations before training — ROC-AUC = 1.0 is a red flag, not a success.",
             "Synthetic data labels must be probabilistic to avoid perfect separability; deterministic rules are only valid for simple thresholds in production.",

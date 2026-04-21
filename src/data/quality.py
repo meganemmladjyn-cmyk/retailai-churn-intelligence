@@ -356,7 +356,7 @@ def _print_report(result: dict[str, Any], source: Path) -> None:
             for msg in warns:
                 print(f"  [WARN]  {msg}")
 
-    print(f"\nSTATISTICS")
+    print("\nSTATISTICS")
     print("-" * 54)
     print(f"  Rows                    : {stats.get('row_count', '?'):>10,}")
     print(f"  Columns                 : {stats.get('column_count', '?'):>10}")
@@ -374,7 +374,7 @@ def _print_report(result: dict[str, Any], source: Path) -> None:
 
     range_issues = stats.get("value_range_issues", {})
     if range_issues:
-        print(f"  Value range checks")
+        print("  Value range checks")
         for key, val in range_issues.items():
             label = key.replace("_", " ").capitalize()
             print(f"    {label:<22} : {val!s:>9}")

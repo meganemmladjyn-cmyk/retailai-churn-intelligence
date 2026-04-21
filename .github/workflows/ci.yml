@@ -26,7 +26,7 @@ jobs:
 
       - name: Run tests
         run: >
-          pytest
+          python -m pytest
           tests/test_ml.py
           tests/test_data_quality.py
           tests/test_features.py

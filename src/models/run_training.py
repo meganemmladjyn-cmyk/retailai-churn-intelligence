@@ -7,9 +7,6 @@ import tempfile
 import time
 from pathlib import Path
 
-# Fix Windows cp1252 encoding crash with MLflow emojis — required on Windows machines
-sys.stdout.reconfigure(encoding="utf-8")
-
 import joblib
 import mlflow
 import pandas as pd
@@ -19,6 +16,9 @@ from sklearn.metrics import f1_score, recall_score, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
+
+# Fix Windows cp1252 encoding crash with MLflow emojis — required on Windows machines
+sys.stdout.reconfigure(encoding="utf-8")
 
 FEATURES_PATH = Path("data/features.csv")
 MODELS_DIR = Path("models")
