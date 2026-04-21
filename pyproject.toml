@@ -1,3 +1,11 @@
+[project]
+name = "retailai-churn-intelligence"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "faker>=25.2.0",
+]
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
@@ -9,6 +17,7 @@ ignore = ["E501"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+pythonpath = ["."]
 
 [tool.black]
 line-length = 100

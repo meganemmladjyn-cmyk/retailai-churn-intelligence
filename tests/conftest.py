@@ -1,5 +1,8 @@
 import asyncio
+from pathlib import Path
 
+import joblib
+import pandas as pd
 import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
@@ -7,6 +10,44 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 
 from app.database import Base, get_db
 from app.main import app
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+
+_ROOT = Path(__file__).parent.parent
+_CLEAN_CSV = _ROOT / "data" / "processed" / "customers_clean.csv"
+_FEATURES_CSV = _ROOT / "data" / "features.csv"
+_MODEL_PKL = _ROOT / "models" / "production_model.pkl"
+
+_NON_FEATURE_COLS = {
+    "customer_id", "signup_date", "last_purchase_date",
+    "country", "gender", "churn",
+}
+
+# ---------------------------------------------------------------------------
+# ML / data fixtures
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="session")
+def sample_cleaned_df() -> pd.DataFrame:
+    """Full cleaned customer dataset loaded from data/processed/customers_clean.csv."""
+    return pd.read_csv(_CLEAN_CSV, parse_dates=["signup_date", "last_purchase_date"])
+
+
+@pytest.fixture(scope="session")
+def model_input_df() -> pd.DataFrame:
+    """Feature matrix (first 20 rows) aligned with the production model's training columns."""
+    df = pd.read_csv(_FEATURES_CSV)
+    feature_cols = [c for c in df.columns if c not in _NON_FEATURE_COLS]
+    return df[feature_cols].head(20)
+
+
+@pytest.fixture(scope="session")
+def production_model():
+    """Production LightGBM model loaded from models/production_model.pkl."""
+    return joblib.load(_MODEL_PKL)
 
 TEST_DATABASE_URL = (
     "postgresql+asyncpg://retailai:password@localhost:5432/retailai_churn_test"
