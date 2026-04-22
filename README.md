@@ -8,7 +8,7 @@
 
 **Customer churn prediction system for SME e-commerce — FastAPI + LightGBM + Streamlit, deployed on Render.**
 
-Live demo: [YOUR_STREAMLIT_URL](YOUR_STREAMLIT_URL)
+Live demo: [https://retailai-churn.streamlit.app/](https://retailai-churn.streamlit.app/)
 
 ---
 
